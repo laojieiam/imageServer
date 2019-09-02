@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <#if msg??>
+    <div class="alert alert-info alert-dismissible myalert" style="position: absolute;">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>${msg}</strong>
+    </div>
+</#if>
+<#if msgList??>
+<div class="alert alert-info alert-dismissible myalert" style="position: absolute;">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>
+        <#list msgList as m>
+            ${m}<br>
+        </#list>
+    </strong>
+</div>
+</#if>
+<div style="display: flex;height: 40px;width: 100%;line-height: 40px;background: #eeeeee;box-shadow: 0 3px 3px #aaa">
+    <div style="flex: 3;padding-left: 10px;border-right: 1px solid #aaa;">预览图片</div>
+    <div style="flex: 14;padding-left: 10px;border-right: 1px solid #aaa;">图片地址</div>
+    <div style="flex: 3;padding-left: 10px;">图片操作</div>
+</div>
+<#list images as image>
+<div class="image_item">
+    <div class="image_item_img">
+        <img src="${image.imgUrl}">
+    </div>
+    <div class="image_item_text">
+        <div style="height: 130px;">
+            <p>url地址：${image.imgUrl}</p>
+            <p>备注：${image.remark}</p>
+            <p>上传时间：${image.createTime}</p>
+        </div>
+    </div>
+    <div class="image_item_controller">
+        <ul>
+            <li><a href="#">删除</a></li>
+            <li><a href="#">更新</a></li>
+        </ul>
+    </div>
+</div>
+
+</#list>
+
+<ul class="paging" >
+    <#if selectMsg??>
+        <li style="width: 80px"><a href="/images/imageList?page=${nowPage-1}&selectMsg=${selectMsg}">上一页</a></li>
+    <#else>
+        <li style="width: 80px"><a href="/images/imageList?page=${nowPage-1}">上一页</a></li>
+    </#if>
+
+    <#if pages gt 10 >
+        <!-- 大于8 -->
+        <#if nowPage gt 8>
+            <#if selectMsg??>
+                <li><a href="/images/imageList?page=1&selectMsg=${selectMsg}">1</a></li>
+            <#else>
+                <li><a href="/images/imageList?page=1">1</a></li>
+            </#if>
+            <li style="border: none;">...</li>
+            <#list (nowPage-6)..(nowPage+1) as i>
+                <#if i lt (pages+1)>
+                    <#if selectMsg??>
+                        <#if i==nowPage>
+                            <li style="background: deepskyblue"><a style="color: #ffffff;" href="/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
+                            <#else>
+                            <li><a href="/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
+                        </#if>
+                    <#else>
+                        <#if i==nowPage>
+                            <li style="background: deepskyblue"><a style="color: #ffffff;" href="/images/imageList?page=${i}">${i}</a></li>
+                        <#else>
+                            <li><a href="/images/imageList?page=${i}">${i}</a></li>
+                        </#if>
+                    </#if>
+
+                </#if>
+            </#list>
+            <#if nowPage!=(pages-1)&&nowPage!=(pages-2)&&nowPage!=pages>
+                <li style="border: none;">...</li>
+            </#if>
+            <#if selectMsg??>
+                    <#if nowPage!=(pages-1)&&nowPage!=pages>
+                        <li><a href="/images/imageList?page=${pages}&selectMsg=${selectMsg}">${pages}</a></li>
+                    </#if>
+                <#else>
+                    <#if nowPage!=(pages-1)&&nowPage!=pages>
+                        <li><a href="/images/imageList?page=${pages}">${pages}</a></li>
+                    </#if>
+            </#if>
+
+        </#if>
+        <!-- 小于9 -->
+        <#if nowPage lt 9>
+            <#list 1..9 as i>
+                <#if selectMsg??>
+                    <#if i==nowPage>
+                        <li style="background: deepskyblue"><a style="color: #ffffff;" href="/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
+                    <#else>
+                        <li><a href="/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
+                    </#if>
+                    <#else>
+                    <#if i==nowPage>
+                        <li style="background: deepskyblue"><a style="color: #ffffff;" href="/images/imageList?page=${i}">${i}</a></li>
+                    <#else>
+                        <li><a href="/images/imageList?page=${i}">${i}</a></li>
+                    </#if>
+                </#if>
+            </#list>
+            <li style="border: none;">...</li>
+            <#if selectMsg??>
+                <li><a href="/images/imageList?page=${pages}&selectMsg=${selectMsg}">${pages}</a></li>
+            <#else>
+                <li><a href="/images/imageList?page=${pages}">${pages}</a></li>
+            </#if>
+
+        </#if>
+        <#else>
+            <#list 1..pages as i>
+                <#if selectMsg??>
+                    <#if i==nowPage>
+                        <li style="background: deepskyblue"><a style="color: #ffffff;" href="/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
+                    <#else>
+                        <li><a href="/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
+                    </#if>
+                    <#else>
+                    <#if i==nowPage>
+                        <li style="background: deepskyblue"><a style="color: #ffffff;" href="/images/imageList?page=${i}">${i}</a></li>
+                    <#else>
+                        <li><a href="/images/imageList?page=${i}">${i}</a></li>
+                    </#if>
+                </#if>
+            </#list>
+    </#if>
+    <#if selectMsg??>
+        <li style="width: 80px"><a href="/images/imageList?page=${nowPage+1}&selectMsg=${selectMsg}">下一页</a></li>
+    <#else>
+        <li style="width: 80px"><a href="/images/imageList?page=${nowPage+1}">下一页</a></li>
+    </#if>
+
+</ul>
+</div>
+</body>
+</html>

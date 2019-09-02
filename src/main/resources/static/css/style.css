@@ -1,0 +1,123 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/*upload上传页面*/
+.input_item {
+    display: flex;
+    height: 30px;
+    margin: 10px 0;
+}
+
+.input_item p {
+    flex: 1;
+}
+
+.input_item textarea {
+    flex: 4;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.input_item input {
+    flex: 4;
+}
+
+/*imgList*/
+.wrap {
+    width: 1000px;
+    margin: 30px auto;
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-around;
+}
+
+.image_item {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.image_item .image_item_img {
+    width: 150px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    flex-flow: wrap;
+    align-content: center;
+    flex: 3;
+    text-align: center;
+}
+
+.image_item .image_item_img img {
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+    max-width: 90%;
+    max-height: 90%;
+    box-shadow: 3px 3px 5px #aaaaaa;
+}
+
+.image_item .image_item_text {
+    flex: 14;
+    margin: 0 50px;
+    align-items: center;
+    display: flex;
+    flex-flow: wrap;
+}
+
+.image_item .image_item_controller {
+    flex: 3;
+    align-items: center;
+    display: flex;
+    flex-flow: wrap;
+}
+
+.image_item .image_item_controller ul {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    /*background: #eeeeee;*/
+}
+
+.image_item .image_item_controller li {
+    text-align: center;
+    display: block;
+    width: 60%;
+    background: chocolate;
+    margin: 15px auto;
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px #aaaaaa;
+}
+
+.image_item .image_item_controller li a {
+    text-decoration: none;
+    color: #ffffff;
+    display: block;
+    width: 100%;
+}
+
+.paging {
+    display: flex;
+    width: 60%;
+    margin: 20px auto;
+    justify-content: space-around;
+}
+.paging li{
+    list-style: none;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    border: 1px solid dodgerblue;
+    border-radius: 5px;
+}
+.paging li a{
+    color: #555;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+    line-height: 28px;
+}
