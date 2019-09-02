@@ -19,10 +19,10 @@ import java.util.List;
  */
 public class CodeBuilder {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        String url="jdbc:mysql://47.100.211.38:3306/imagesServer?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8";
+        String url="jdbc:mysql://你的ip:3306/数据库?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8";
         String driverName="com.mysql.jdbc.Driver";
         String username="root";
-        String password="Abcd1234!";
+        String password="123456";
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
 
