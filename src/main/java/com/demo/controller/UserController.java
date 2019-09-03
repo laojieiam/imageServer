@@ -2,9 +2,14 @@ package com.demo.controller;
 
 
 import com.demo.Utils.MD5Util;
+import org.apache.catalina.security.SecurityUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.MessageDigest;
 
@@ -17,11 +22,29 @@ import java.security.MessageDigest;
  * @since 2019-08-29
  */
 @Controller
-@RequestMapping("/user")
 public class UserController {
 
-    public void test(){
-        MD5Util.getMD5String("");
+    @RequestMapping("/")
+    public String index(){
+        if(SecurityUtils.getSubject().isAuthenticated())
+            return "redirect:/images/imageList";
+        return "index";
+    }
+
+
+    @RequestMapping("/user/login")
+    public String login(@RequestParam("username")String username,
+                        @RequestParam("password")String password){
+
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token=new UsernamePasswordToken(username,password);
+        try {
+            subject.login(token);
+        }catch (Exception e){
+//            e.printStackTrace();
+            return "redirect:/images/imageList";
+        }
+        return "redirect:/images/imageList";
     }
 
 }

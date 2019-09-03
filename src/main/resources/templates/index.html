@@ -2,11 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
     <title>Index</title>
+    <style>
+        #login{
+            width: 50%;
+            margin: 10px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px #dddddd;
+            display: flex;
+            flex-flow: wrap;
+        }
+        #login .login_input_item{
+            width: 100%;
+            display: flex;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 3px 3px 3px #eeeeee;
+        }
+        #login .login_input_item span{
+            color: #ffffff;
+            flex: 1;
+            text-align: center;
+            display: block;
+            border-bottom-left-radius: 10px ;
+            border-top-left-radius: 10px;
+            background: chocolate;
+            padding: 5px 10px;
+        }
+        #login .login_input_item input{
+            flex: 5;
+            border: none;
+            outline: none;
+            padding: 5px 10px;
+            border-bottom-right-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+    </style>
 </head>
 <body>
+<div style="width: 800px;margin: 30px auto;">
+    <div style="width: 60%;margin: 0 auto">
+        <span>图片管理系统登录</span>
+        <#if loginMsg??><span style="float: left">${loginMsg}</span></#if>
+        <div style="width: 100%;border-bottom: 1px solid #eeeeee;margin: 10px 0 20px 0"></div>
+    </div>
+    <form id="login" action="${request.contextPath}/user/login" method="post">
+        <div class="login_input_item">
+            <span>用户名</span>
+            <input type="text" name="username" placeholder="请输入用户名...">
+        </div>
+        <div class="login_input_item">
+            <span>密码</span>
+            <input type="password" name="password" placeholder="请输入用户密码...">
+        </div>
+        <div class="login_input_item">
+            <input style="cursor: pointer;padding: 8px 0;background: chocolate;border-radius: 5px;color: #ffffff" type="submit" value="登录">
+        </div>
 
-<a href="${request.contextPath}/images/toUpload">上传图片</a>
+    </form>
+
+</div>
 </body>
 </html>

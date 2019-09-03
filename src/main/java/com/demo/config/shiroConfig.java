@@ -25,7 +25,7 @@ public class shiroConfig {
     }
 
     //将自己的验证方式加入容器
-    @Bean
+    @Bean("userRealm")
     public UserRealm myShiroRealm() {
         UserRealm userRealm = new UserRealm();
         return userRealm;
@@ -45,12 +45,13 @@ public class shiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         Map<String, String> map = new HashMap<>();
-        //登出
+
         map.put("/","anon");
-        map.put("/image/*", "authc");
-        //登录
-        shiroFilterFactoryBean.setLoginUrl("/login");
-        //错误页面，认证不通过跳转
+        map.put("/user/login","anon");
+        map.put("/**", "authc");
+        //登录页面
+        shiroFilterFactoryBean.setLoginUrl("/");
+        //错误页面
         shiroFilterFactoryBean.setUnauthorizedUrl("/error");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
         return shiroFilterFactoryBean;
