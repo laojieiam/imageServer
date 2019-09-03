@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://47.100.211.38:3306/img_server?useUnicode=true&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://47.1你的ip:3306/数据库?useUnicode=true&useUnicode=true&characterEncoding=UTF-8
     username: root
-    password: Abcd1234!
+    password: 密码
     driver-class-name: com.mysql.jdbc.Driver
     #freemarker配置
     hikari:
