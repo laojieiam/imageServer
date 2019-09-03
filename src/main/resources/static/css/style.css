@@ -121,3 +121,33 @@
     height: 100%;
     line-height: 28px;
 }
+.search_box{
+    display: flex;
+    width: 1000px;
+    background: #333333;
+    margin: 0 auto;
+    color: #ffffff;
+}
+.search_box div{
+    flex: 1;
+    color: #ffffff;
+}
+.search_box input{
+    flex: 10;
+    background: #eeeeee;
+    color: #000000;
+    border: none;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+    outline: none;
+    padding: 5px 15px;
+}
+.search_box button{
+    background: chocolate;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+    outline: none;
+    border: none;
+    flex: 1;
+    cursor: pointer;
+}

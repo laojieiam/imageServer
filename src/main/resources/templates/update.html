@@ -13,7 +13,6 @@
     <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-
 <div style="width: 100%;background: #333333;padding: 15px 0;min-width: 1000px">
     <div class="search_box">
         <div>
@@ -21,8 +20,8 @@
             <a style="color: #ffffff;margin: 0;padding: 5px 0;text-decoration: none;display: block" href="${request.contextPath}/images/imageList">退出搜索</a>
             <#else>
             <p style="color: #ffffff;margin: 0;padding: 5px 0;">搜索图片</p>
-        </#if>
-    </div>
+            </#if>
+        </div>
     <input type="text" id="selectMsg" name="selectMsg" placeholder="搜索图片，根据图片命名或备注搜索...">
     <button onclick="search()"><i style="font-size:24px" class="fa">&#xf002</i></button>
     <div style="flex: 1">
@@ -30,29 +29,38 @@
     </div>
 </div>
 </div>
+
+<div style="width: 50%;margin: 0 auto;height: 50px;text-align: center">
+    <#if msg??>
+    <div class="alert alert-info alert-dismissible myalert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>${msg}</strong>
+    </div>
+</#if>
+</div>
 <div style="width: 800px;margin: 30px auto;background: #eeeeee;padding: 20px;border-radius: 10px;box-shadow: 3px 3px 5px #aaaaaa;">
 
-    <h3 style="text-align: center">图片上传</h3>
-    <p>注意：图片上传可以一次上传多张图片，可以进行自定义命名，多张图片上传时将会自动在命名后追加数字以作区分。（同名会进行覆盖）</p>
+    <h3 style="text-align: center">更新图片信息</h3>
+    <p>如果要更新图片，请选择一张图片上传。</p>
     <div style="display: flex">
-        <form enctype="multipart/form-data" method="post" action="${request.contextPath}/images/upload" style="flex: 2;margin-right: 10px">
+        <form enctype="multipart/form-data" method="post" action="${request.contextPath}/images/update" style="flex: 2;margin-right: 10px">
             <div class="input_item">
                 <p>选择文件</p>
-                <input type="file" name="file" id="file" multiple="multiplt" value="请选择要上传的图片">
+                <input type="file" name="file" id="file"  value="请选择要更新的图片">
             </div>
             <div class="input_item">
-                <p>自定义命名</p>
-                <input type="text" style="padding: 0 10px;border-radius: 5px;outline: none" name="filename"  placeholder="请自定义文件名，可不填...">
+                <p>更新命名</p>
+                <input type="text" name="filename"  placeholder="更新文件名，可不填...">
             </div>
             <div class="input_item" style="height: 90px">
-                <p>图片备注</p>
-                <textarea type="text" name="remark" style="outline: none;resize:none;"  placeholder="请添加图片备注，可不填..."></textarea>
+                <p>更新备注</p>
+                <textarea type="text" name="remark" placeholder="图片备注，可不填..."></textarea>
             </div>
             <div class="input_item">
                 <p> </p>
-                <input type="submit" style="background: #eeeeee;border-radius: 10px;border:1px solid #aaa;padding: 0 10px;background: chocolate;color: #ffffff;" value="上传">
+                <input type="submit" style="background: #eeeeee;border-radius: 10px;border:1px solid #aaa;padding: 0 10px;background: chocolate;color: #ffffff;" value="更新">
             </div>
-
+            <input type="hidden" name="id" value="${id}">
         </form>
         <div style="flex: 1;padding: 10px;">
             <p style="margin-bottom: 10px">图片预览：</p>

@@ -4,19 +4,32 @@
     <meta charset="UTF-8">
     <title>Result</title>
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
 </head>
 <body>
-<div class="wrap">
-    <#if msg??>
-    <div class="alert alert-info alert-dismissible myalert" style="position: absolute;">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>${msg}</strong>
+<div style="width: 100%;background: #333333;padding: 15px 0;min-width: 1000px">
+    <div class="search_box">
+        <div>
+            <#if selectMsg??>
+                <a style="color: #ffffff;margin: 0;padding: 5px 0;text-decoration: none;display: block" href="${request.contextPath}/images/imageList">退出搜索</a>
+            <#else>
+                <p style="color: #ffffff;margin: 0;padding: 5px 0;">搜索图片</p>
+            </#if>
+        </div>
+        <input type="text" id="selectMsg" name="selectMsg" placeholder="搜索图片，根据图片命名或备注搜索...">
+        <button onclick="search()"><i style="font-size:24px" class="fa">&#xf002</i></button>
+        <div style="flex: 1">
+            <a style="float: right ;color: #ffffff;margin: 0;padding: 5px 0;text-decoration: none;display: block" href="${request.contextPath}/images/toUpload">上传图片</a>
+        </div>
     </div>
-</#if>
+</div>
+
+<div class="wrap">
 <#if msgList??>
 <div class="alert alert-info alert-dismissible myalert" style="position: absolute;">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -27,6 +40,7 @@
     </strong>
 </div>
 </#if>
+
 <div style="display: flex;height: 40px;width: 100%;line-height: 40px;background: #eeeeee;box-shadow: 0 3px 3px #aaa">
     <div style="flex: 3;padding-left: 10px;border-right: 1px solid #aaa;">预览图片</div>
     <div style="flex: 14;padding-left: 10px;border-right: 1px solid #aaa;">图片地址</div>
@@ -46,8 +60,8 @@
     </div>
     <div class="image_item_controller">
         <ul>
-            <li><a href="#">删除</a></li>
-            <li><a href="#">更新</a></li>
+            <li><a href="#" onclick="delete_img(${image.id})">删除</a></li>
+            <li><a href="${request.contextPath}/images/toUpdate?id=${image.id}">更新</a></li>
         </ul>
     </div>
 </div>
@@ -56,33 +70,33 @@
 
 <ul class="paging" >
     <#if selectMsg??>
-        <li style="width: 80px"><a href="/images/imageList?page=${nowPage-1}&selectMsg=${selectMsg}">上一页</a></li>
+        <li style="width: 80px"><a href="${request.contextPath}/images/imageList?page=${nowPage-1}&selectMsg=${selectMsg}">上一页</a></li>
     <#else>
-        <li style="width: 80px"><a href="/images/imageList?page=${nowPage-1}">上一页</a></li>
+        <li style="width: 80px"><a href="${request.contextPath}/images/imageList?page=${nowPage-1}">上一页</a></li>
     </#if>
 
     <#if pages gt 10 >
         <!-- 大于8 -->
         <#if nowPage gt 8>
             <#if selectMsg??>
-                <li><a href="/images/imageList?page=1&selectMsg=${selectMsg}">1</a></li>
+                <li><a href="${request.contextPath}/images/imageList?page=1&selectMsg=${selectMsg}">1</a></li>
             <#else>
-                <li><a href="/images/imageList?page=1">1</a></li>
+                <li><a href="${request.contextPath}/images/imageList?page=1">1</a></li>
             </#if>
             <li style="border: none;">...</li>
             <#list (nowPage-6)..(nowPage+1) as i>
                 <#if i lt (pages+1)>
                     <#if selectMsg??>
                         <#if i==nowPage>
-                            <li style="background: deepskyblue"><a style="color: #ffffff;" href="/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
+                            <li style="background: deepskyblue"><a style="color: #ffffff;" href="${request.contextPath}/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
                             <#else>
-                            <li><a href="/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
+                            <li><a href="${request.contextPath}/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
                         </#if>
                     <#else>
                         <#if i==nowPage>
-                            <li style="background: deepskyblue"><a style="color: #ffffff;" href="/images/imageList?page=${i}">${i}</a></li>
+                            <li style="background: deepskyblue"><a style="color: #ffffff;" href="${request.contextPath}/images/imageList?page=${i}">${i}</a></li>
                         <#else>
-                            <li><a href="/images/imageList?page=${i}">${i}</a></li>
+                            <li><a href="${request.contextPath}/images/imageList?page=${i}">${i}</a></li>
                         </#if>
                     </#if>
 
@@ -93,11 +107,11 @@
             </#if>
             <#if selectMsg??>
                     <#if nowPage!=(pages-1)&&nowPage!=pages>
-                        <li><a href="/images/imageList?page=${pages}&selectMsg=${selectMsg}">${pages}</a></li>
+                        <li><a href="${request.contextPath}/images/imageList?page=${pages}&selectMsg=${selectMsg}">${pages}</a></li>
                     </#if>
                 <#else>
                     <#if nowPage!=(pages-1)&&nowPage!=pages>
-                        <li><a href="/images/imageList?page=${pages}">${pages}</a></li>
+                        <li><a href="${request.contextPath}/images/imageList?page=${pages}">${pages}</a></li>
                     </#if>
             </#if>
 
@@ -107,23 +121,23 @@
             <#list 1..9 as i>
                 <#if selectMsg??>
                     <#if i==nowPage>
-                        <li style="background: deepskyblue"><a style="color: #ffffff;" href="/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
+                        <li style="background: deepskyblue"><a style="color: #ffffff;" href="${request.contextPath}/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
                     <#else>
-                        <li><a href="/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
+                        <li><a href="${request.contextPath}/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
                     </#if>
                     <#else>
                     <#if i==nowPage>
-                        <li style="background: deepskyblue"><a style="color: #ffffff;" href="/images/imageList?page=${i}">${i}</a></li>
+                        <li style="background: deepskyblue"><a style="color: #ffffff;" href="${request.contextPath}/images/imageList?page=${i}">${i}</a></li>
                     <#else>
-                        <li><a href="/images/imageList?page=${i}">${i}</a></li>
+                        <li><a href="${request.contextPath}/images/imageList?page=${i}">${i}</a></li>
                     </#if>
                 </#if>
             </#list>
             <li style="border: none;">...</li>
             <#if selectMsg??>
-                <li><a href="/images/imageList?page=${pages}&selectMsg=${selectMsg}">${pages}</a></li>
+                <li><a href="${request.contextPath}/images/imageList?page=${pages}&selectMsg=${selectMsg}">${pages}</a></li>
             <#else>
-                <li><a href="/images/imageList?page=${pages}">${pages}</a></li>
+                <li><a href="${request.contextPath}/images/imageList?page=${pages}">${pages}</a></li>
             </#if>
 
         </#if>
@@ -131,26 +145,46 @@
             <#list 1..pages as i>
                 <#if selectMsg??>
                     <#if i==nowPage>
-                        <li style="background: deepskyblue"><a style="color: #ffffff;" href="/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
+                        <li style="background: deepskyblue"><a style="color: #ffffff;" href="${request.contextPath}/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
                     <#else>
-                        <li><a href="/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
+                        <li><a href="${request.contextPath}/images/imageList?page=${i}&selectMsg=${selectMsg}">${i}</a></li>
                     </#if>
                     <#else>
                     <#if i==nowPage>
-                        <li style="background: deepskyblue"><a style="color: #ffffff;" href="/images/imageList?page=${i}">${i}</a></li>
+                        <li style="background: deepskyblue"><a style="color: #ffffff;" href="${request.contextPath}/images/imageList?page=${i}">${i}</a></li>
                     <#else>
-                        <li><a href="/images/imageList?page=${i}">${i}</a></li>
+                        <li><a href="${request.contextPath}/images/imageList?page=${i}">${i}</a></li>
                     </#if>
                 </#if>
             </#list>
     </#if>
     <#if selectMsg??>
-        <li style="width: 80px"><a href="/images/imageList?page=${nowPage+1}&selectMsg=${selectMsg}">下一页</a></li>
+        <li style="width: 80px"><a href="${request.contextPath}/images/imageList?page=${nowPage+1}&selectMsg=${selectMsg}">下一页</a></li>
     <#else>
-        <li style="width: 80px"><a href="/images/imageList?page=${nowPage+1}">下一页</a></li>
+        <li style="width: 80px"><a href="${request.contextPath}/images/imageList?page=${nowPage+1}">下一页</a></li>
     </#if>
 
 </ul>
 </div>
+<script>
+    function search() {
+        location.href="${request.contextPath}/images/imageList?page=1&selectMsg="+$("#selectMsg").val();
+    }
+    function delete_img(id) {
+        if (confirm("你确定提交吗？")) {
+            $.ajax({
+                url: '${request.contextPath}/images/delete',
+                type: 'post',
+                // 设置的是请求参数
+                data: { id: id },
+                // 用于设置响应体的类型 注意 跟 data 参数没关系！！！
+                success: function (data) {
+                   if(data==200||data=="200")location.href="${request.contextPath}/images/imageList";
+                   else alert("删除失败");
+                }
+            })
+        }
+    }
+</script>
 </body>
 </html>
