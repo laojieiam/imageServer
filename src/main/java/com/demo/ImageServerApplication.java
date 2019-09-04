@@ -14,14 +14,10 @@ import java.util.Collections;
 
 @SpringBootApplication
 @MapperScan(basePackages = "com.demo.dao")
-public class ImageServerApplication extends SpringBootServletInitializer{
+public class ImageServerApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ImageServerApplication.class,args);
     }
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(ImageServerApplication.class);
-    }
 }

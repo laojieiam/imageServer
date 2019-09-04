@@ -45,8 +45,11 @@ public class shiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         Map<String, String> map = new HashMap<>();
-
+        map.put("/img/**","anon");//注意不要用images文件夹，会与imagesController的路径起冲突
+        map.put("/css/**","anon");
+        map.put("/js/**","anon");
         map.put("/","anon");
+        map.put("/user/logout","logout");
         map.put("/user/login","anon");
         map.put("/**", "authc");
         //登录页面

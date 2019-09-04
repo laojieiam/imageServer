@@ -31,6 +31,11 @@ public class UserController {
         return "index";
     }
 
+    @RequestMapping("/user/logout")
+    public String logout(){
+        SecurityUtils.getSubject().logout();
+        return "redirect:/";
+    }
 
     @RequestMapping("/user/login")
     public String login(@RequestParam("username")String username,
