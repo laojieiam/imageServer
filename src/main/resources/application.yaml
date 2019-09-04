@@ -53,3 +53,6 @@ mybatis-plus:
     cache-enabled: false
 server:
   port: 8082
+#自定义
+image:
+  server_url: http://mlaojie.xyz:8080
