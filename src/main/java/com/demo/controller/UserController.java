@@ -33,7 +33,7 @@ public class UserController {
 
     @RequestMapping("/user/logout")
     public String logout(){
-        SecurityUtils.getSubject().logout();
+//        SecurityUtils.getSubject().logout();
         return "redirect:/";
     }
 

@@ -5,10 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.demo.entities.Images;
-import com.demo.entities.User;
 import com.demo.service.ImagesService;
-import com.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -40,6 +38,11 @@ public class ImagesController {
     @Autowired
     private ImagesService imagesService;
 
+    @Value("${image.server_url}")
+    private String URL;
+//    @Value("${image.root_path}")
+//    private String rootPath;
+
     /**
      * 前往更新图片信息
      *
@@ -51,6 +54,17 @@ public class ImagesController {
     public String toUpdate(@RequestParam("id") int id, Model model) {
         model.addAttribute("id", id);
         return "update";
+    }
+
+    /**
+     * 移除session中的msgList
+     * @return
+     */
+    @RequestMapping("/removeMsgList")
+    public String removeMsgList(HttpServletRequest request){
+        if(null!=request.getSession(false).getAttribute("msgList"))
+        request.getSession(false).removeAttribute("msgList");
+        return "200";
     }
 
     /**
@@ -99,7 +113,6 @@ public class ImagesController {
     public String upload(@RequestParam("file") MultipartFile[] files, @RequestParam(value = "remark", required = false, defaultValue = "-")
             String remark, @RequestParam("filename") String filename, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        session.setMaxInactiveInterval(2);
         List<String> result = new ArrayList<>();//保存文件的上传结果
         for (int i = 0; i < files.length; i++) {
 
@@ -122,12 +135,12 @@ public class ImagesController {
                 //存储图片
                 //获取存储路径
                 File rootPath = new File(request.getServletContext().getRealPath(""));
-                String strRootPath = "C:\\app\\apache-tomcat-8.5.43\\webapps";
-                String savePath = strRootPath + "\\ROOT\\images\\" + fileName + suffix;
+//                String strRootPath = "C:/app/apache-tomcat-8.5.43/webapps";
+                String savePath = rootPath.getParent() + "/ROOT/images/" + fileName + suffix;
                 Images images = new Images();
                 images.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 images.setRemark(remark);
-                images.setImgUrl("http://localhost:8080/images/" + fileName + suffix);
+                images.setImgUrl(this.URL +"/images/" + fileName + suffix);
 //                if(files.length==1)
                 if (saveOrUpdateFile(files[i], savePath, images, 0))
                     result.add("第" + (i + 1) + "个文件保存成功。");
@@ -148,7 +161,8 @@ public class ImagesController {
             String imgPath = image.getImgUrl().substring(image.getImgUrl().lastIndexOf("/") + 1);
             //获取存储路径
             File rootPath = new File(request.getServletContext().getRealPath(""));
-            String strRootPath = "C:\\app\\apache-tomcat-8.5.43\\webapps\\ROOT\\images";//根目录
+//            String strRootPath = "C:/app/apache-tomcat-8.5.43/webapps/ROOT/images";//根目录
+            String strRootPath = rootPath.getParent()+"/ROOT/images";//根目录
             deleteFile(strRootPath, imgPath);
             imagesService.removeById(id);
         } catch (Exception e) {
@@ -172,13 +186,12 @@ public class ImagesController {
                          @RequestParam(value = "remark", required = false) String remark,
                          @RequestParam("filename") String filename, @RequestParam("id") int id, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        session.setMaxInactiveInterval(2);
         Images image = imagesService.getById(id);
         List<String> result = new ArrayList<>();
         //要删除或者操作的文件名
         String imgPath = image.getImgUrl().substring(image.getImgUrl().lastIndexOf("/") + 1);
         //获取存储路径
-        String strRootPath = "C:\\app\\apache-tomcat-8.5.43\\webapps\\ROOT\\images";//根目录
+        String strRootPath = new File(request.getServletContext().getRealPath("")).getParent()+"/ROOT/images";//根目录
         //如果要更新备注
         if (null != remark && !remark.trim().equals("")) image.setRemark(remark);
         try {
@@ -202,8 +215,8 @@ public class ImagesController {
                     else fileName = imgPath.substring(0,imgPath.lastIndexOf("."));
                     //存储图片
                     //获取存储路径
-                    String savePath = strRootPath + "\\" + fileName + suffix;
-                    image.setImgUrl("http://localhost:8080/images/" + fileName + suffix);
+                    String savePath = strRootPath + "/" + fileName + suffix;
+                    image.setImgUrl(this.URL +"/images/" + fileName + suffix);
                     if (saveOrUpdateFile(file, savePath, image, 1))
                         result.add("文件更新成功。");
                     else result.add("文件更新失败。");
@@ -213,11 +226,11 @@ public class ImagesController {
             if (file.isEmpty() && (null != filename&&!filename.trim().equals(""))) {
                 File[] files = new File(strRootPath).listFiles();//获取根目录下所有文件
                 for (File f : files) {
-                    if (f.toString().substring(f.toString().lastIndexOf("\\") + 1).equals(imgPath)) {
+                    if (f.toString().substring(f.toString().lastIndexOf("/") + 1).equals(imgPath)) {
                         //重命名
-                        if (f.renameTo(new File(strRootPath + "\\" + filename + image.getImgUrl().substring(image.getImgUrl().lastIndexOf("."))))) {
+                        if (f.renameTo(new File(strRootPath + "/" + filename + image.getImgUrl().substring(image.getImgUrl().lastIndexOf("."))))) {
                             //更新数据库
-                            image.setImgUrl("http://localhost:8080/images/" + filename + image.getImgUrl().substring(image.getImgUrl().lastIndexOf(".")));
+                            image.setImgUrl(this.URL +"/images/" + filename + image.getImgUrl().substring(image.getImgUrl().lastIndexOf(".")));
                             if (imagesService.updateById(image))
                                 result.add("更新成功。");
                             else result.add("更新失败。");
@@ -284,7 +297,7 @@ public class ImagesController {
     public boolean deleteFile(String rootPath, String deleteFileName) {
         File[] files = new File(rootPath).listFiles();//获取根目录下所有文件
         for (File file : files) {
-            if (file.toString().substring(file.toString().lastIndexOf("\\") + 1).equals(deleteFileName)) {
+            if (file.toString().substring(file.toString().lastIndexOf("/") + 1).equals(deleteFileName)) {
                 file.delete();
                 return true;
             }

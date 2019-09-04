@@ -36,7 +36,7 @@
 <div class="wrap">
 <#if msgList??>
 <div class="alert alert-info alert-dismissible myalert" style="position: absolute;">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <button type="button" onclick="removeMsgList()" class="close" data-dismiss="alert">&times;</button>
     <strong>
         <#list msgList as m>
             ${m}<br>
@@ -71,7 +71,7 @@
 </div>
 
 </#list>
-
+<#if total!=0>
 <ul class="paging" >
     <#if selectMsg??>
         <li style="width: 80px"><a href="${request.contextPath}/images/imageList?page=${nowPage-1}&selectMsg=${selectMsg}">上一页</a></li>
@@ -169,6 +169,9 @@
     </#if>
 
 </ul>
+<#else>
+<h4 style="text-align: center">暂无数据</h4>
+</#if>
 </div>
 <script>
     function search() {
@@ -188,6 +191,16 @@
                 }
             })
         }
+    }
+    function removeMsgList() {
+        $.ajax({
+            url: '${request.contextPath}/images/removeMsgList',
+            type: 'post',
+            // 设置的是请求参数
+            // 用于设置响应体的类型 注意 跟 data 参数没关系！！！
+            success: function (data) {
+            }
+        })
     }
 </script>
 </body>
